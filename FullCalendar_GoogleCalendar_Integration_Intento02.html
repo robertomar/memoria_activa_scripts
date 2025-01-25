@@ -1,0 +1,150 @@
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet">
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media="print">
+<script src="https://momentjs.com/downloads/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js'></script>
+<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/gcal.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/locale/es.js'></script>
+<script type='text/javascript'>
+// posting this because the following is a poor example https://fullcalendar.io/docs/google_calendar/
+// This was used to wrap google calendar in squarespace and make it look tremendously better
+$(document).ready(function() {
+	$('#calendar').fullCalendar({
+		googleCalendarApiKey: 'AIzaSyBaVXPh24vc2e4eVJ7Eheoc-afU1m0rQnI',
+		eventSources: [
+			{
+				googleCalendarId: 'c280b3cc3525376dabef4fbeae89c7a8ecda2652817c682abc7465ad5d166714@group.calendar.google.com',
+				className: 'desapariciones'
+			},
+			{
+				googleCalendarId: 'ddf6d8cc3f6c5cddbe17acdd28e41fa28f9529235237b61bcccec4b71133b79e@group.calendar.google.com',
+				className: 'eventos-destacados'
+			}
+		],
+		header: {
+			left: 'title',
+			center: '',
+			right: 'prev,next'
+		},
+		validRange: {
+            start: moment().startOf('year').format('YYYY-MM-DD'), // Primera fecha del mes actual
+            end: moment().endOf('year').format('YYYY-MM-DD') // Última fecha del mes actual
+        },
+		visibleRange: function(currentDate) {
+            return {
+                start: currentDate.clone().startOf('year'),
+                end: currentDate.clone().endOf('year')
+            };
+        },
+        showNonCurrentDates: false, // Esto oculta los días fuera del mes actual
+		fixedWeekCount: false, // Evitar mostrar una semana extra
+		events: function(start, end, timezone, callback) {
+			// Filtrar eventos según el rango de fechas actual
+            var events = []; // Aquí puedes cargar los eventos dinámicamente si lo deseas
+            callback(events);
+        },
+		locale: 'es',
+		titleFormat: 'MMMM', // Formato del título: solo el nombre del mes
+		// Función para modificar el título del mes después de la traducción
+		/*viewRender: function(view, element) {
+			var monthTitle = view.title; // Obtiene el título del mes
+			var formattedTitle = monthTitle.charAt(0).toUpperCase() + monthTitle.slice(1).toLowerCase(); // Cambia la primera letra a mayúscula
+			element.find('.fc-header-title').text(formattedTitle); // Aplica el nuevo texto
+		},*/
+		// Agregar evento para mostrar detalles del evento al hacer clic
+		eventClick: function(event, jsEvent, view) {
+			// Evita que se abra el enlace al calendario de Google
+			jsEvent.preventDefault();
+			// Crear una ventana emergente (modal) con la información del evento
+			var eventDetails = '<h3>' + event.title + '</h3>';
+			eventDetails += '<p><strong>Fecha:</strong> ' + event.start.format('MMMM D, YYYY') + '</p>';
+            if (event.description) {
+				eventDetails += '<p><strong>Descripción:</strong> ' + event.description + '</p>';
+			}
+			
+			// Mostrar el modal
+			var modal = $('<div id="eventModal" class="modal"><div class="modal-content">' + eventDetails + '<button id="closeModal">Cerrar</button></div></div>');
+			$('body').append(modal);
+			
+			// Estilos para el modal
+			$('#eventModal').css({
+				'position': 'fixed',
+				'top': '50%',
+				'left': '50%',
+				'transform': 'translate(-50%, -50%)',
+				'background-color': 'white',
+				'color': 'black', // Asegura que el texto sea negro
+				'padding': '20px',
+				'border': '1px solid #ccc',
+				'box-shadow': '0 0 10px rgba(0, 0, 0, 0.5)',
+				'z-index': '9999'
+			});
+			
+			// Estilos para el contenido del modal
+			$('#eventModal .modal-content').css({
+				'color': 'black', // Asegura que el texto dentro del modal sea negro
+			});
+			
+			// Estilos para el botón de cerrar
+			$('#closeModal').css({
+				'background-color': '#007bff',
+				'color': 'white',
+				'border': 'none',
+				'padding': '5px 10px',
+				'cursor': 'pointer',
+				'margin-top': '10px'
+			});
+			
+			// Función para cerrar el modal
+			$('#closeModal').click(function() {
+				$('#eventModal').remove();
+			});
+			
+			/*$('#calendar').click(function() {
+				$('#eventModal').remove();
+			});*/
+		}
+    });
+});
+</script>
+<style>
+    .fc-day-header { /* Ocultar nombres de los días */
+		display: none;
+		color: black
+    }
+	
+	.desapariciones{
+		background-color: #d34848;
+		font-size: 15px;
+		border-color: #d34848;
+	}
+	
+	.eventos-destacados{
+		background-color: #2eab96;
+		font-size: 15px;
+		border-color: #2eab96;
+	}
+	
+	body {
+		/*margin: 40px 10px;*/
+		padding: 0;
+		/*font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;*/
+		/*font-size: 14px;*/
+	}
+		
+	#loading {
+		display: none;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+	}
+
+	#calendar {
+		max-width: 100%;
+		/*height: 100%;*/
+		margin: 0 auto;
+	}
+
+</style>
+<div id='loading'>loading...</div>
+<div id='calendar'></div>
