@@ -1,0 +1,47 @@
+<div id="spreadsheet-data"></div>
+
+<script>
+	const sheetID = "1O3cyFaX5sZNsvu73mcWbc9Fi_6X74JIkqKBjqjX6JTk";
+	const sheetName = "Hoja_1";
+	const api_key = "AIzaSyBD0bM7n-7IOoAP0hDAjznvlshke7im194";
+	
+	// URL de la API para acceder a los datos de Google Sheets
+	const sheetURL = `https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${sheetName}?key=${api_key}`;
+	//const sheetURL = `https://docs.google.com/spreadsheets/d/1O3cyFaX5sZNsvu73mcWbc9Fi_6X74JIkqKBjqjX6JTk`;
+	
+	// Función para obtener los datos de Google Sheets
+	async function fetchSpreadsheetData() {
+		try {
+			const response = await fetch(sheetURL);
+			const data = await response.json();
+			
+			// Verifica si hay datos
+			if (data.values && data.values.length > 0) {
+				const table = document.createElement("table");
+				table.border = "1";
+				
+				// Recorre las filas de la hoja
+        		data.values.forEach((row, index) => {
+					const tr = document.createElement("tr");
+					row.forEach((cell) => {
+						const cellElement = document.createElement(index === 0 ? "th" : "td");
+						cellElement.textContent = cell;
+						tr.appendChild(cellElement);
+					});
+					table.appendChild(tr);
+				});
+				
+				// Agrega la tabla al contenedor
+				document.getElementById("spreadsheet-data").appendChild(table);
+			} else {
+				document.getElementById("spreadsheet-data").textContent = "No hay datos disponibles.";
+			}
+		} catch (error) {
+			console.error("Error al obtener los datos:", error);
+			document.getElementById("spreadsheet-data").textContent = "Hubo un error al cargar los datos.";
+		}
+	}
+	
+	// Llamar a la función
+	fetchSpreadsheetData();
+</script>
