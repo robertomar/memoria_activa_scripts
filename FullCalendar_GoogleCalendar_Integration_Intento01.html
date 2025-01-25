@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Calendario FullCalendar</title>
+</head>
+<body>
+	<script type='text/javascript' src='fullcalendar/gcal.js'></script>
+	<script type='text/javascript'>
+		$(function(){
+			$('#calendar').fullCalendar({
+				googleCalendarApiKey: 'AIzaSyBaVXPh24vc2e4eVJ7Eheoc-afU1m0rQnI',
+				eventSources: [
+					{
+						googleCalendarId: 'c280b3cc3525376dabef4fbeae89c7a8ecda2652817c682abc7465ad5d166714@group.calendar.google.com',
+						className: 'eventos_desaparicion'
+					},
+					{
+						googleCalendarId: 'ddf6d8cc3f6c5cddbe17acdd28e41fa28f9529235237b61bcccec4b71133b79e@group.calendar.google.com',
+						className: 'eventos_destacados'
+					}
+				]
+			});
+		});
+	</script>
+</body>
+</html>
