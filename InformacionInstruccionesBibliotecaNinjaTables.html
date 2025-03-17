@@ -1,0 +1,944 @@
+<!-- Botón para abrir la ventana modal. -->
+<div class="contenedorBtn">
+	<button id="abrirModal" class="openBtn">Instrucciones</button>
+</div>
+
+<!-- Ventana modal. -->
+<div id="ventanaModal" class="modal">
+	<div class="contenedorModal">
+		<header class="encabezadoModal">
+			<button id="headerBtnCerrarModal" class="cerrarModal">X</button>
+		</header>
+		<section class="informacionModal">
+			<h4>Biblioteca</h4>
+			<p>Los documentos de esta biblioteca pueden consultarse de acuerdo a las siguientes clasificaciones:</p>
+			<ul>
+				<li><b>Categorías:</b> La principal clasificación temática para todos los documentos que se encuentran en esta biblioteca.</li>
+				<li><b>Descriptores para Temáticas Generales y Específicas:</b> Palabras clave que describen el tema del texto en cuestión a grandes rasgos (temática general) y otros dos para complementar la búsqueda (temáticas específicas 1 y 2), se podría decir que se trata de temáticas secundarias.</li>
+				<li><b>Descriptores para Lugares:</b> Lista de lugares de origen de los documentos de la biblioteca, va desde estados de la república mexicana hasta continentes o regiones de estos, pasando por diversos países.</li>
+				<li><b>Descriptores para Fechas Temáticas:</b> Lista de periodos temporales que abarcan las lecturas de esta biblioteca, se usaron los siglos para ubicar cada recurso.</li>
+			</ul>
+			<h5>¿Cómo usar la búsqueda avanzada en esta biblioteca?</h5>
+			<p><b>1.</b> En la esquina superior derecha de la tabla encontraras un botón con una flecha que apunta hacia abajo, con esto podrás buscar solo en algunas columnas.</p>
+			<p><b>2.</b> Haz clic o pulsa en este botón y este va a desplegar un menú, en el cual vas a poder descartar algunas columnas.</p>
+			<p><b>3.</b> Observa que todas las columnas tienen una casilla tachada, pulsa en la casilla que quieras descartar, esto para centrar la búsqueda en los datos de ciertas columnas.</p>
+			<p><b>4.</b> Una vez que hayas apuntado a las columnas donde quieres buscar, simplemente ingresa el dato que deseas encontrar.</p>
+			<p><b>Importante: </b> Revisa la lista de categorías y descriptores para ubicar con más facilidad el recurso que deseas encontrar.</p>
+			<h5>Lista de Categorías y Descriptores</h5>
+			<div id="contenedorTablas" class="contenedorTabla"></div>
+		</section>
+		<footer class="piePaginaModal">
+			<button id="btnCerrarModal" class="cerrarModal">Cerrar</button>
+		</footer>
+	</div>
+</div>
+
+<script type='text/javascript'>
+    document.addEventListener("DOMContentLoaded", function() {
+        const categorias = [
+            {
+                "categoria": "Atención Psicosocial"
+            },
+            {
+                "categoria": "Búsqueda e Identificación de Cuerpos"
+            },
+            {
+                "categoria": "Comisiones de la Verdad"
+            },
+            {
+                "categoria": "Contexto"
+            },
+            {
+                "categoria": "Historia"
+            },
+            {
+                "categoria": "Identidad e Identificación de Cuerpos"
+            },
+            {
+                "categoria": "Identificación de Cuerpos"
+            },
+            {
+                "categoria": "Investigación"
+            },
+            {
+                "categoria": "Investigación Judicial"
+            },
+            {
+                "categoria": "Justicia y Reparación del Daño"
+            },
+            {
+                "categoria": "Marco Legal"
+            },
+            {
+                "categoria": "Memoria"
+            },
+            {
+                "categoria": "Protocolos de Búsqueda e Investigación"
+            },
+            {
+                "categoria": "Reparación del Daño"
+            },
+            {
+                "categoria": "Sociedad Civil y Colectivos"
+            }
+        ];
+        const descriptores_temas = [
+            {
+            "descriptor_nombre": "Acciones Colectivas"
+            },
+            {
+            "descriptor_nombre": "Acercamiento Gubernamental"
+            },
+            {
+            "descriptor_nombre": "Acercamiento Social"
+            },
+            {
+            "descriptor_nombre": "Activismo Civil"
+            },
+            {
+            "descriptor_nombre": "Acuerdos y Tratados"
+            },
+            {
+            "descriptor_nombre": "Análisis Fotográfico"
+            },
+            {
+            "descriptor_nombre": "Análisis Hemerográfico"
+            },
+            {
+            "descriptor_nombre": "Antropología Forense"
+            },
+            {
+            "descriptor_nombre": "Aplicación de Justicia"
+            },
+            {
+            "descriptor_nombre": "Aplicación de la Ley"
+            },
+            {
+            "descriptor_nombre": "Arte Político"
+            },
+            {
+            "descriptor_nombre": "Atención Psicosocial"
+            },
+            {
+            "descriptor_nombre": "Audiovisual"
+            },
+            {
+            "descriptor_nombre": "Autobiografías"
+            },
+            {
+            "descriptor_nombre": "Autoritarismo"
+            },
+            {
+            "descriptor_nombre": "Ayotzinapa"
+            },
+            {
+            "descriptor_nombre": "Brigadas de Búsqueda"
+            },
+            {
+            "descriptor_nombre": "Burocracia"
+            },
+            {
+            "descriptor_nombre": "Búsqueda de Desparecidos"
+            },
+            {
+            "descriptor_nombre": "Búsqueda de Justicia"
+            },
+            {
+            "descriptor_nombre": "Búsqueda de la Verdad"
+            },
+            {
+            "descriptor_nombre": "Búsqueda de Personas"
+            },
+            {
+            "descriptor_nombre": "Búsqueda Efectiva"
+            },
+            {
+            "descriptor_nombre": "Búsqueda en Campo"
+            },
+            {
+            "descriptor_nombre": "Búsqueda en Desarrollo"
+            },
+            {
+            "descriptor_nombre": "Búsqueda por Familiares"
+            },
+            {
+            "descriptor_nombre": "Cementerios"
+            },
+            {
+            "descriptor_nombre": "Ciencias Aplicadas"
+            },
+            {
+            "descriptor_nombre": "Cinematografía"
+            },
+            {
+            "descriptor_nombre": "Configuración Identitaria"
+            },
+            {
+            "descriptor_nombre": "Conflicto Político"
+            },
+            {
+            "descriptor_nombre": "Contexto Histórico"
+            },
+            {
+            "descriptor_nombre": "Contexto histórico"
+            },
+            {
+            "descriptor_nombre": "Contrainsurgencia"
+            },
+            {
+            "descriptor_nombre": "Corrupción"
+            },
+            {
+            "descriptor_nombre": "Creencias y Perspectivas"
+            },
+            {
+            "descriptor_nombre": "Crimen Organizado"
+            },
+            {
+            "descriptor_nombre": "Criminalística"
+            },
+            {
+            "descriptor_nombre": "Crisis de Derechos Humanos"
+            },
+            {
+            "descriptor_nombre": "Derecho a la Búsqueda"
+            },
+            {
+            "descriptor_nombre": "Derecho a la Verdad"
+            },
+            {
+            "descriptor_nombre": "Derechos Humanos"
+            },
+            {
+            "descriptor_nombre": "Desaparición Forzada"
+            },
+            {
+            "descriptor_nombre": "Despertar Social"
+            },
+            {
+            "descriptor_nombre": "Desplazamiento Interno Forzado"
+            },
+            {
+            "descriptor_nombre": "Duelo"
+            },
+            {
+            "descriptor_nombre": "Encubrimiento de Información"
+            },
+            {
+            "descriptor_nombre": "Estadísticas"
+            },
+            {
+            "descriptor_nombre": "Estado de Derecho"
+            },
+            {
+            "descriptor_nombre": "Estética de la Desaparición"
+            },
+            {
+            "descriptor_nombre": "Estrategias de Búsqueda"
+            },
+            {
+            "descriptor_nombre": "Estudio Comparativo"
+            },
+            {
+            "descriptor_nombre": "Estudio Cualitativo"
+            },
+            {
+            "descriptor_nombre": "Estudio de Casos"
+            },
+            {
+            "descriptor_nombre": "Estudios de Género"
+            },
+            {
+            "descriptor_nombre": "Experencias Colectivas"
+            },
+            {
+            "descriptor_nombre": "Familiares de Víctimas"
+            },
+            {
+            "descriptor_nombre": "Fosas Clandestinas"
+            },
+            {
+            "descriptor_nombre": "Fotografías"
+            },
+            {
+            "descriptor_nombre": "Fraude Político"
+            },
+            {
+            "descriptor_nombre": "Genocidio"
+            },
+            {
+            "descriptor_nombre": "Geofísica Forense"
+            },
+            {
+            "descriptor_nombre": "Grupos Vulnerables"
+            },
+            {
+            "descriptor_nombre": "Guerra contra las Drogas"
+            },
+            {
+            "descriptor_nombre": "Guerra Sucia"
+            },
+            {
+            "descriptor_nombre": "Identificación Forense"
+            },
+            {
+            "descriptor_nombre": "Imagen y Reconstrucción"
+            },
+            {
+            "descriptor_nombre": "Impacto Colectivo"
+            },
+            {
+            "descriptor_nombre": "Impunidad"
+            },
+            {
+            "descriptor_nombre": "Incorporación de Estrategias en Búsqueda"
+            },
+            {
+            "descriptor_nombre": "Informe"
+            },
+            {
+            "descriptor_nombre": "Informe de Avances"
+            },
+            {
+            "descriptor_nombre": "Informe por Particulares"
+            },
+            {
+            "descriptor_nombre": "Interpretación"
+            },
+            {
+            "descriptor_nombre": "Intervención de Cambio"
+            },
+            {
+            "descriptor_nombre": "Intervención Familiar"
+            },
+            {
+            "descriptor_nombre": "Intervención Psicológica"
+            },
+            {
+            "descriptor_nombre": "Intervención Universitaria"
+            },
+            {
+            "descriptor_nombre": "Investigación"
+            },
+            {
+            "descriptor_nombre": "Investigación Judicial"
+            },
+            {
+            "descriptor_nombre": "Jóvenes"
+            },
+            {
+            "descriptor_nombre": "Justicia"
+            },
+            {
+            "descriptor_nombre": "Justicia Alternativa"
+            },
+            {
+            "descriptor_nombre": "Justicia Transicional"
+            },
+            {
+            "descriptor_nombre": "Legislación"
+            },
+            {
+            "descriptor_nombre": "Legislación Méxicana"
+            },
+            {
+            "descriptor_nombre": "Lenguaje y Desaparición"
+            },
+            {
+            "descriptor_nombre": "Leyes Generales en Desaparición"
+            },
+            {
+            "descriptor_nombre": "Lineamientos"
+            },
+            {
+            "descriptor_nombre": "Manual de Procedimientos"
+            },
+            {
+            "descriptor_nombre": "Manual Práctico"
+            },
+            {
+            "descriptor_nombre": "Material Digital"
+            },
+            {
+            "descriptor_nombre": "Maternidad y Contexto"
+            },
+            {
+            "descriptor_nombre": "Mecanismos Colectivos"
+            },
+            {
+            "descriptor_nombre": "Mecanismos Extrainstitucionales"
+            },
+            {
+            "descriptor_nombre": "Memoria Compartida"
+            },
+            {
+            "descriptor_nombre": "Memoria Visual"
+            },
+            {
+            "descriptor_nombre": "Migración"
+            },
+            {
+            "descriptor_nombre": "Militarización"
+            },
+            {
+            "descriptor_nombre": "Monitoreo"
+            },
+            {
+            "descriptor_nombre": "Mujeres Vulnerabilidad"
+            },
+            {
+            "descriptor_nombre": "Negociación"
+            },
+            {
+            "descriptor_nombre": "Normatividad"
+            },
+            {
+            "descriptor_nombre": "Olvido Social"
+            },
+            {
+            "descriptor_nombre": "Organismos Gubernamentales"
+            },
+            {
+            "descriptor_nombre": "Perfiles de ADN"
+            },
+            {
+            "descriptor_nombre": "Políticas Públicas"
+            },
+            {
+            "descriptor_nombre": "Privación de la Libertad"
+            },
+            {
+            "descriptor_nombre": "Procedimientos a Seguir"
+            },
+            {
+            "descriptor_nombre": "Procedimientos Internacionales"
+            },
+            {
+            "descriptor_nombre": "Proceso del Duelo"
+            },
+            {
+            "descriptor_nombre": "Proceso Emocional"
+            },
+            {
+            "descriptor_nombre": "Propuesta de Modelo Penal"
+            },
+            {
+            "descriptor_nombre": "Protección a Derechos Humanos"
+            },
+            {
+            "descriptor_nombre": "Protección a Víctimas"
+            },
+            {
+            "descriptor_nombre": "Protocolos"
+            },
+            {
+            "descriptor_nombre": "Redes Sociales"
+            },
+            {
+            "descriptor_nombre": "Reformas"
+            },
+            {
+            "descriptor_nombre": "Reparaciones"
+            },
+            {
+            "descriptor_nombre": "Repercusiones"
+            },
+            {
+            "descriptor_nombre": "Representación de Ausencia"
+            },
+            {
+            "descriptor_nombre": "Representación Simbólica"
+            },
+            {
+            "descriptor_nombre": "Represión"
+            },
+            {
+            "descriptor_nombre": "Resolución de Conflictos"
+            },
+            {
+            "descriptor_nombre": "Respuesta Ciudadana"
+            },
+            {
+            "descriptor_nombre": "Restauración de la Paz"
+            },
+            {
+            "descriptor_nombre": "Restitución de Cadaveres"
+            },
+            {
+            "descriptor_nombre": "Seguridad"
+            },
+            {
+            "descriptor_nombre": "Superación del Dolor"
+            },
+            {
+            "descriptor_nombre": "Tecnologías de Poder"
+            },
+            {
+            "descriptor_nombre": "Trabajo Forzado"
+            },
+            {
+            "descriptor_nombre": "Transparencia de la Información"
+            },
+            {
+            "descriptor_nombre": "Trata de Personas"
+            },
+            {
+            "descriptor_nombre": "Trauma Psicosocial"
+            },
+            {
+            "descriptor_nombre": "Uso de Tecnología en Búsqueda"
+            },
+            {
+            "descriptor_nombre": "Uso de Tecnologías"
+            },
+            {
+            "descriptor_nombre": "Víctimas"
+            },
+            {
+            "descriptor_nombre": "Violación a los Derechos Humanos"
+            },
+            {
+            "descriptor_nombre": "Violencia de Estado"
+            },
+            {
+            "descriptor_nombre": "Violencia Institucional"
+            }
+        ]
+        const descriptores_lugares = [
+            {
+            "descriptor_nombre": "Aguascalientes"
+            },
+            {
+            "descriptor_nombre": "América"
+            },
+            {
+            "descriptor_nombre": "América Latina"
+            },
+            {
+            "descriptor_nombre": "Argentina"
+            },
+            {
+            "descriptor_nombre": "Argentina y Uruguay"
+            },
+            {
+            "descriptor_nombre": "Bolivia"
+            },
+            {
+            "descriptor_nombre": "Chihuahua"
+            },
+            {
+            "descriptor_nombre": "Chile"
+            },
+            {
+            "descriptor_nombre": "Coahuila"
+            },
+            {
+            "descriptor_nombre": "Coahuila y Nuevo León"
+            },
+            {
+            "descriptor_nombre": "Colombia"
+            },
+            {
+            "descriptor_nombre": "Ecuador"
+            },
+            {
+            "descriptor_nombre": "EE.UU."
+            },
+            {
+            "descriptor_nombre": "El Salvador"
+            },
+            {
+            "descriptor_nombre": "España"
+            },
+            {
+            "descriptor_nombre": "Francia"
+            },
+            {
+            "descriptor_nombre": "Frontera México-EE.UU."
+            },
+            {
+            "descriptor_nombre": "Guatemala"
+            },
+            {
+            "descriptor_nombre": "Guatemala, Honduras y México"
+            },
+            {
+            "descriptor_nombre": "Internacional"
+            },
+            {
+            "descriptor_nombre": "Jalisco"
+            },
+            {
+            "descriptor_nombre": "Medellín"
+            },
+            {
+            "descriptor_nombre": "México"
+            },
+            {
+            "descriptor_nombre": "México-Argentina"
+            },
+            {
+            "descriptor_nombre": "Michoacán"
+            },
+            {
+            "descriptor_nombre": "Morelos"
+            },
+            {
+            "descriptor_nombre": "Nuevo León"
+            },
+            {
+            "descriptor_nombre": "Oaxaca"
+            },
+            {
+            "descriptor_nombre": "Perú"
+            },
+            {
+            "descriptor_nombre": "Puebla"
+            },
+            {
+            "descriptor_nombre": "Sudamérica"
+            },
+            {
+            "descriptor_nombre": "Tamaulipas"
+            },
+            {
+            "descriptor_nombre": "Unión Europea"
+            },
+            {
+            "descriptor_nombre": "Veracruz"
+            }
+        ];
+        const descriptores_fechas = [
+            {
+                "descriptor_nombre":"Siglo 20"
+            },
+            {
+                "descriptor_nombre":"Siglo 21"
+            },
+            {
+                "descriptor_nombre":"Siglos 20 - 21"
+            }
+        ]
+
+        function construirTabla() {
+            // Crear una variable tipo string.
+            let htmlString = "";
+
+            // Creamos el encabezado para la tabla.
+            htmlString += "<table>";
+            htmlString += "<thead>";
+            //htmlString += "<tr><th>Categorías</th></tr>";
+            htmlString += "<tr>";
+            htmlString += "<th>Categorías</th>";
+            htmlString += "<th>Descriptores (Generales y Especificos)</th>";
+            htmlString += "<th>Descriptores (Lugar)</th>";
+            htmlString += "<th>Descriptores (Fechas)</th>";
+            htmlString += "</tr>";
+            htmlString += "</thead><tbody>";
+
+            let maxLength = Math.max(
+                categorias.length, 
+                descriptores_temas.length, 
+                descriptores_lugares.length, 
+                descriptores_fechas.length
+            );
+
+            // Crear un bucle para para inprimir las filas de la tabla.
+            for(let index = 0; index < maxLength; index++){
+                let celdaCategoria = categorias[index] ? categorias[index].categoria : "";
+                let celdaDescTemas = descriptores_temas[index] ? descriptores_temas[index].descriptor_nombre : "";
+                let celdaDescLugares = descriptores_lugares[index] ? descriptores_lugares[index].descriptor_nombre : "";
+                let celdaDescFechas = descriptores_fechas[index] ? descriptores_fechas[index].descriptor_nombre : "";
+                /*htmlString += `<tr><td>${celdaCategoria.categoria}</td></tr>`;*/
+                htmlString += "<tr>";
+                htmlString += `<td>${celdaCategoria}</td>`;
+                htmlString += `<td>${celdaDescTemas}</td>`;
+                htmlString += `<td>${celdaDescLugares}</td>`;
+                htmlString += `<td>${celdaDescFechas}</td>`;
+                htmlString += "</tr>";
+            }
+
+            // Finalizar el bloque de la tabla.
+            htmlString += "</tbody></table>";
+
+            // Poner este string en la salida que definimos en HTML
+            let tableContainer = document.querySelector("#contenedorTablas");
+            if (tableContainer) {
+                tableContainer.innerHTML = htmlString;
+            }else {
+                console.error("No se encontró el contenedor de la tabla.");
+            }
+        }
+
+        // Ventana modal
+        var modal = document.getElementById("ventanaModal");
+
+        // Botón que abre el modal
+        var abrir = document.getElementById("abrirModal");
+
+        // Hace referencia al elemento <span> que tiene la X que cierra la ventana
+        var cerrar = document.getElementsByClassName("cerrarModal");
+
+        // Cuando el usuario hace clic en el botón, se abre la ventana
+        abrir.addEventListener("click", function() {
+            //modal.classList.add("visible");
+            modal.style.display = "flex";
+        });
+
+        for (var i = 0; i < cerrar.length; i++){
+            cerrar[i].addEventListener("click", function() {
+                //modal.classList.remove("visible");
+                modal.style.display = "none"; // Oculta el modal
+            });
+        }
+
+        // Si el usuario hace clic fuera de la ventana, se cierra.
+        window.addEventListener("click", function(event) {
+            if (event.target === modal) {
+                //modal.style.display = "none";
+                // modal.classList.remove("visible");
+                modal.style.display = "none"; // Oculta el modal
+            }
+        });
+
+        construirTabla();
+    });
+</script>
+
+<style>
+	/*DISEÑO DEL BOTÓN PARA ABRIR LA VENTANA MODAL.*/
+	.contenedorBtn{
+		text-align: center;
+	}
+
+	.openBtn{
+		background-color: #2BAE8E;
+		color: white;
+		padding: 15px 32px;
+		font-size: 16px;
+		cursor: pointer;
+		border: none;
+		border-radius: 10px;
+	}
+
+	.openBtn:hover{
+		background-color: #47d1af;
+	}
+
+	/* DISEÑO DE LA VENTANA MODAL */
+	.modal {
+		position: fixed;
+		display: none;
+		justify-content: center;
+		align-items: center;
+		/*z-index: 1;*/
+		z-index: 9999;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.4);
+	}
+
+	.contenedorModal{
+		background-color: #F4F4F4;
+		width: 35%;
+		height: 40%;
+		border-radius: 15px;
+		padding-top: 2%;
+		padding-bottom: 2%;
+		padding-left: 2%;
+		padding-right: 2%;
+		/*font-family: raleway;*/
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.encabezadoModal{
+		width: 100%;
+		height: 10%;
+		text-align: right;
+	}
+
+	#headerBtnCerrarModal{
+		background-color: #CC3333;
+		color: white;
+		padding: 5px 10px 5px 10px;
+		font-size: 16px;
+		cursor: pointer;
+		border: none;
+		border-radius: 5%;
+	}
+
+	#headerBtnCerrarModal:hover{
+		background-color: #DB7070;
+	}
+
+	.informacionModal{
+		overflow-y: auto;
+		width: 100%;
+		height: 75%;
+		padding: 2%;
+	}
+
+	.informacionModal h4, h5{
+		text-align: center;
+		font-weight: bold;
+	}
+
+	.informacionModal h4{
+		font-size: 20px;
+	}
+
+	.informacionModal h5{
+		font-size: 18px;
+		padding-top: 15px;
+	}
+
+	.informacionModal p{
+		text-align: justify;
+		font-size: 15px;
+		color: #000000;
+	}
+
+	.informacionModal b{
+		font-weight: bold;
+	}
+
+	.informacionModal ul{
+		list-style: disc;
+		padding-left: 6%;
+	}
+
+	.informacionModal ol{
+		list-style: decimal;
+		padding-left: 6%;
+	}
+
+	.informacionModal li{
+		font-size: 15px;
+		text-align: justify;
+	}
+
+	.contenedorTabla{
+		align-items: center;
+	}
+
+	.contenedorTabla table{
+		width: 100%;
+	}
+
+	.contenedorTabla th, td{
+		font-size: 14px;
+		vertical-align: middle;
+	}
+
+	.contenedorTabla th{
+		background-color: #2BAE8E;
+		font-weight: bold;
+		text-align: center;
+	}
+
+	.contenedorTabla td {
+		background-color: #86CBC5;
+		text-align: left;
+	}
+
+	.piePaginaModal{
+		width: 100%;
+		height: 15%;
+		text-align: center;
+		padding-top: 1%;
+	}
+
+	#btnCerrarModal{
+		background-color: #2BAE8E;
+		color: white;
+		padding: 15px 32px;
+		font-size: 16px;
+		cursor: pointer;
+		border: none;
+		border-radius: 10px;
+	}
+
+	#btnCerrarModal:hover{
+		background-color: #47D1AF;
+	}
+
+	/* DISEÑO RESPONSIVO */
+	@media screen and (max-width: 600px) {
+		/* DISEÑO RESPONSIVO DE LA VENTANA MODAL */
+		.modal {
+			/*visibility: hidden;*/
+			position: fixed;
+			/*display: flex;*/
+			display: none;
+			justify-content: center;
+			align-items: center;
+			z-index: 1;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.4);
+		}
+
+		.contenedorModal{
+			background-color: #F4F4F4;
+			width: 80%;
+			height: 60%;
+			border-radius: 15px;
+			overflow: hidden;
+			display: flex;
+			flex-direction: column;
+			padding: 4%;
+		}
+
+		.encabezadoModal{
+			width: 100%;
+			height: auto;
+			display: flex;
+			margin: 0;
+			padding: 3%;
+			justify-content: right;
+			position: sticky;
+			bottom: 0;
+		}
+
+		.informacionModal{
+			width: 100%;
+			height: auto;
+			margin: 0;
+			padding: 3%;
+		}
+
+		.informacionModal ol{
+			padding-left: 6%;
+		}
+
+		.informacionModal ul{
+			padding-left: 6%;
+		}
+
+		.informacionModal li{
+			margin: 5%;
+		}
+
+		.piePaginaModal{
+			width: 100%;
+			height: auto;
+			display: flex;
+			margin: 0;
+			padding: 3%;
+			justify-content: center;
+			align-items: center;
+			position: sticky;
+			bottom: 0;
+		}
+
+		.contenedorTabla{
+			overflow-y: auto; /*Habilitamos el scroll para desplazarnos por la tabla.*/
+		}
+	}
+</style>
