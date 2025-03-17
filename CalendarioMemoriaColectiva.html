@@ -1,0 +1,192 @@
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet">
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media="print">
+<script src="https://momentjs.com/downloads/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js'></script>
+<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/gcal.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/locale/es.js'></script>
+
+<script type='text/javascript'>
+$(document).ready(function() {
+	$('#calendar').fullCalendar({
+		googleCalendarApiKey: 'AIzaSyBaVXPh24vc2e4eVJ7Eheoc-afU1m0rQnI', // Clave de la API de Google
+		eventSources: [
+			{
+				googleCalendarId: 'c280b3cc3525376dabef4fbeae89c7a8ecda2652817c682abc7465ad5d166714@group.calendar.google.com', // ID del calendario con eventos de desaparición
+				className: 'desapariciones'
+			},
+			{
+				googleCalendarId: 'ddf6d8cc3f6c5cddbe17acdd28e41fa28f9529235237b61bcccec4b71133b79e@group.calendar.google.com', // ID del calendario con eventos destacados
+				className: 'eventos-destacados'
+			}
+		],
+		header: { // Configuración de la cabecera del calendario
+			left: 'title', // Muestro el título del mismo, que es básicamente el nombre del mes
+			center: '', // En el centro no pongo nada
+			right: 'prev,next' // En la derecha pongo los botones para avanzar o retroceder en el calendario
+		},
+		locale: 'es', // Traduccion a Español
+		titleFormat: 'MMMM', // Formato del título: solo el nombre del mes
+		validRange: {
+            start: moment().startOf('year').format('YYYY-MM-DD'), // Primera fecha del mes actual
+            end: moment().endOf('year').format('YYYY-MM-DD') // Última fecha del mes actual
+        },
+		visibleRange: function(currentDate) { // Límita el calendario al año actual
+            return {
+                start: currentDate.clone().startOf('year'), // Primera fecha del año actual
+                end: currentDate.clone().endOf('year') // Última fecha del año actual
+            };
+        },
+        showNonCurrentDates: false, // Esto oculta los días fuera del mes actual
+		fixedWeekCount: false, // Evitar mostrar una semana extra
+		events: function(start, end, timezone, callback) { // Filtrar eventos según el rango de fechas actual
+            var events = []; // Aquí puedes cargar los eventos dinámicamente si lo deseas
+            callback(events);
+        },
+		eventClick: function(event, jsEvent, view) {
+			// Prevenir la acción predeterminada
+			jsEvent.preventDefault();
+            
+            // Crear el contenido del modal
+            var eventDetails = '<h4 style="font-weight:bold;">' + event.title + '</h4>';
+            //eventDetails += '<p style="color:black"><span style="font-weight:bold;">Fecha: </span>' + event.start.format('MMMM D') + '</p>';
+            if (event.description) {
+				eventDetails += '<p style="color:black">' + event.description + '</p>';
+				//eventDetails += '<div style="color:black;">' + event.description + '</div>';
+			}
+
+			// Crear el modal con el contenido
+			var modal = $('<div id="eventModal" class="modal"><div class="modal-content">' + eventDetails + '<button id="closeModal">Cerrar</button></div></div>');
+			$('body').append(modal);
+
+			// Estilos para el modal
+			$('#eventModal').css({
+				'position': 'fixed',
+				'top': '0',
+				'left': '0',
+				'width': '100%',
+				'height': '100%',
+				'background-color': 'rgba(0, 0, 0, 0.5)', /* Fondo oscuro con transparencia */
+				'z-index': '9999',
+				'display': 'flex',
+				'justify-content': 'center',
+				'align-items': 'center',
+				'overflow': 'auto' /* Asegura que se pueda desplazar si es necesario */
+			});
+
+			// Estilos para el contenido del modal
+			$('#eventModal .modal-content').css({
+				//'font-weight': 'bold',
+				'background': 'white',
+				'color': 'black', /* Color del texto a negro, por alguna razón solo aplica al título */
+				'padding': '20px',
+				'border-radius': '5px',
+				'max-width': '500px',
+				'width': '90%',
+				'box-sizing': 'border-box',
+				'overflow-y': 'auto', /* Desplazamiento si el contenido es largo */
+				'max-height': '80vh', /* Limita la altura en dispositivos pequeños */
+				'box-shadow': '0 4px 8px rgba(0, 0, 0, 0.2)' /* Agrega sombra */
+			});
+			
+			$('#eventModal .modal-content b').css({
+				'font-weight': 'bold'
+			});
+
+			// Estilos para el botón de cerrar
+			$('#closeModal').css({
+				'background-color': '#007bff',
+				'color': 'white',
+				'border': 'none',
+				'padding': '10px 15px',
+				'cursor': 'pointer',
+				'margin-top': '10px'
+			});
+
+			// Cerrar el modal cuando se haga clic en el botón
+			$('#closeModal').click(function() {
+				$('#eventModal').remove();
+			});
+		}
+    });
+});
+</script>
+
+<style>
+    .fc-day-header { 
+		display: none;
+		color: black;
+    }
+
+	.desapariciones{
+		background-color: #f4d03f;
+		font-size: 15px;
+		border-color: #f4d03f;
+		color: black;
+		font-family: "Times New Roman", Times, serif;
+	}
+	
+	.eventos-destacados{
+		background-color: #2eab96;
+		font-size: 15px;
+		border-color: #2eab96;
+		color: black;
+		font-family: "Times New Roman", Times, serif;
+	}
+	
+	body {
+		padding: 0;
+	}
+		
+	#loading {
+		display: none;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+	}
+
+	#calendar {
+		max-width: 100%;
+		margin: 0 auto;
+	}
+	
+	/* Estilo para el modal */
+	.modal {
+		display: flex; /* Usar flex para centrar el modal */
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5); /* Fondo oscuro con transparencia */
+		color: black !important; /* Color del texto a negro */
+		z-index: 9999;
+		justify-content: center;
+		align-items: center;
+		/*font-weight: bold;*/
+	}
+
+	.modal-content {
+		background: white;
+		color: black !important; /* Color del texto a negro */
+		border-radius: 5px;
+		max-width: 500px;
+		width: 90%;
+		padding: 20px;
+		box-sizing: border-box;
+		overflow-y: auto;
+		max-height: 80vh; /* Ajuste de altura para dispositivos pequeños */
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para destacar el modal */
+	}
+
+	#closeModal {
+		background-color: #007bff;
+		color: white;
+		border: none;
+		padding: 10px 15px;
+		cursor: pointer;
+	}
+</style>
+
+<div id='loading'>loading...</div>
+<div id='calendar'></div>
